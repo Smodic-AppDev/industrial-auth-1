@@ -1,6 +1,6 @@
 class PhotosController < ApplicationController
   before_action :set_photo, only: %i[ show edit update destroy ]
-  before_action :ensure_current_user_is_owner, only: [:destroy]
+  before_action :ensure_current_user_is_owner, only: [:destroy, :edit, :update]
 
   # GET /photos or /photos.json
   def index

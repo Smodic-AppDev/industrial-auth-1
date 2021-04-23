@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[ show edit update destroy ]
+  before_action :ensure_current_user_is_owner, only: [:destroy, :edit, :update]
 
   # GET /comments or /comments.json
   def index
@@ -39,7 +40,7 @@ class CommentsController < ApplicationController
   def update
     respond_to do |format|
       if @comment.update(comment_params)
-        format.html { redirect_to root_url, notice: "Comment was successfully updated." }
+        format.html { redirect_back fallback_location: root_url, notice: "Comment was successfully updated." }
         format.json { render :show, status: :ok, location: @comment }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -61,6 +62,12 @@ class CommentsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])
+    end
+
+    def ensure_current_user_is_owner
+      if current_user != @comment.author
+        redirect_back fallback_location: root_url, alert: "Nice try, sucker!"
+      end
     end
 
     # Only allow a list of trusted parameters through.

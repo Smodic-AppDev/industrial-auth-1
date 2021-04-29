@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<% if current_user.leaders.find_by(username: @user.username) != nil || current_user.id == @user.id %>
+<% if current_user.leaders.find_by(username: @user.username) != nil || current_user.id == @user.id || not(@user.private?) %>
   <% @user.own_photos.each do |photo| %>
     <div class="row mb-4">
       <div class="col-md-6 offset-md-3">
